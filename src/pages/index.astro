@@ -1,5 +1,29 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+import Heading from "../components/index/Heading.astro";
+import Profile from "../components/index/Profile.astro";
+import SNS from "../components/index/SNS.astro";
 ---
 
-<Layout>lomaru.net</Layout>
+<Layout>
+  <div id="main">
+    <section>
+      <Heading>NEWS</Heading>
+      <div>NEWS</div>
+    </section>
+
+    <Profile />
+
+    <SNS />
+  </div>
+
+  <style>
+    #main {
+      display: flex;
+      flex-direction: column;
+
+      gap: calc(var(--space) * 2);
+    }
+  </style>
+</Layout>

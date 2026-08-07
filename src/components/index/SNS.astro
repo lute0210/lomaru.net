@@ -1,0 +1,55 @@
+---
+import type { SvgComponent } from "astro/types";
+import { Image } from "astro:assets";
+import Heading from "./Heading.astro";
+
+import Bluesky from "../../assets/bland/bluesky.svg";
+import GitHub from "../../assets/bland/github.svg";
+import X from "../../assets/bland/x.png";
+
+type Image = ImageMetadata;
+type SVG = SvgComponent & ImageMetadata;
+type Item = { Target: Image | SVG; href: string };
+
+const list: Item[] = [
+  {
+    Target: X,
+    href: "https://x.com/luteTUT",
+  },
+  {
+    Target: Bluesky,
+    href: "https://bsky.app/profile/lomaru.net",
+  },
+  {
+    Target: GitHub,
+    href: "https://github.com/lute0x0",
+  },
+];
+---
+
+<section>
+  <Heading>SNS</Heading>
+  <div class="list">
+    {
+      list.map(({ Target, href }) => (
+        <a href={href} target="_blank">
+          {"name" in Target ? <Target /> : <Image src={Target} alt={""} />}
+        </a>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .list {
+    display: flex;
+    justify-content: center;
+
+    gap: 32px;
+  }
+
+  :where(svg, img) {
+    width: auto;
+    height: 32px;
+  }
+</style>
