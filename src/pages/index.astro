@@ -10,20 +10,46 @@ import SNS from "../components/index/SNS.astro";
   <div id="main">
     <section>
       <Heading>NEWS</Heading>
-      <div>NEWS</div>
+      <div>まだ何も無いよ</div>
     </section>
 
+    <div class="column">
+      <div>
     <Profile />
-
+      </div>
+      <div>
     <SNS />
+      </div>
+    </div>
   </div>
+</Layout>
 
   <style>
     #main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    gap: calc(var(--space) * 2);
+  }
+
+  .column {
       display: flex;
       flex-direction: column;
 
       gap: calc(var(--space) * 2);
     }
+
+  @media screen and (min-width: 680px) {
+    .column {
+      flex-direction: row;
+    }
+
+    .column > * {
+      flex: 1;
+
+      display: flex;
+    }
+  }
   </style>
 </Layout>
