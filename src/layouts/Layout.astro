@@ -27,11 +27,20 @@ import { Font } from "astro:assets";
   </body>
 </html>
 
-<style>
-  html,
-  body {
+<style is:global>
+  :root {
+    --color-blanc: #f7f9fc;
+    --color-noir: #333132;
+  }
+
+  * {
     margin: 0;
-    width: 100%;
+    padding: 0;
+  }
+</style>
+
+<style>
+  html {
     height: 100%;
   }
 
