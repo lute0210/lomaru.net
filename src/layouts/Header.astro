@@ -7,20 +7,68 @@ import Logo from "../assets/logo.svg";
     <Logo class="logo" />
   </a>
 
-  <a>BLOG</a>
+  <nav>
+    <a class="blog" href="/blog">
+      <div class="default"><span>BLOG</span></div>
+      <div class="hover"><span>BLOG</span></div>
+    </a>
+  </nav>
 </header>
 
 <style>
   header {
     display: flex;
     justify-content: space-between;
-    align-items: end;
+    align-items: center;
 
-    .logo {
-      display: block;
+    gap: var(--space);
+  }
 
-      width: auto;
-      height: 32px;
-    }
+  .logo {
+    display: block;
+
+    width: auto;
+    height: 32px;
+  }
+
+  .blog {
+    position: relative;
+
+    color: initial;
+    text-decoration: none;
+  }
+
+  .default span {
+    display: block;
+
+    padding: 7px 11px;
+    border: var(--color-light-noir) 1px dashed;
+  }
+
+  .hover span {
+    display: block;
+
+    padding: 8px 12px;
+  }
+
+  .hover {
+    box-sizing: border-box;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+
+    width: 0;
+    height: 100%;
+
+    color: var(--color-blanc);
+    background-color: var(--color-noir);
+
+    transition: 0.3s;
+  }
+
+  .blog:hover .hover {
+    width: 100%;
   }
 </style>
