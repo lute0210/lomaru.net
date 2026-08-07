@@ -15,17 +15,19 @@ import SNS from "../components/index/SNS.astro";
 
     <div class="column">
       <div>
-    <Profile />
+        <Profile />
       </div>
       <div>
-    <SNS />
+        <SNS />
       </div>
     </div>
   </div>
 </Layout>
 
-  <style>
-    #main {
+<style>
+  #main {
+    flex: 1;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -34,11 +36,11 @@ import SNS from "../components/index/SNS.astro";
   }
 
   .column {
-      display: flex;
-      flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-      gap: calc(var(--space) * 2);
-    }
+    gap: calc(var(--space) * 2);
+  }
 
   @media screen and (min-width: 680px) {
     .column {
@@ -51,5 +53,4 @@ import SNS from "../components/index/SNS.astro";
       display: flex;
     }
   }
-  </style>
-</Layout>
+</style>
