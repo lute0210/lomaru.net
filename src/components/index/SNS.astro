@@ -41,11 +41,29 @@ const list: Item[] = [
 </section>
 
 <style>
+  section {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+  }
+
   .list {
+    flex: 1;
+
     display: flex;
     justify-content: center;
+    align-items: center;
 
     gap: 32px;
+  }
+
+  a {
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  a:hover {
+    transform: rotate(360deg) scale(1.2);
   }
 
   :where(svg, img) {
