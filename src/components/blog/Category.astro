@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  data: CollectionEntry<"category">["data"];
+}
+
+const { data } = Astro.props;
+---
+
+<div style={{ "border-color": data.color }}>
+  {data.name}
+</div>
+
+<style>
+  div {
+    padding: 4px;
+
+    border-width: 1px;
+    border-style: dotted;
+
+    font-size: small;
+  }
+</style>

@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import BlogContent from "../../components/blog/BlogContent.astro";
+import Heading from "../../components/home/Heading.astro";
+import Layout from "../../layouts/Layout.astro";
+
+const blog = await getCollection("blog");
+---
+
+<Layout>
+  <div class="root">
+    <Heading>BLOG</Heading>
+    <div class="list">
+      {blog.map((article) => <BlogContent article={article} />)}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .root {
+    width: 100%;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    gap: var(--space);
+  }
+
+  @media screen and (min-width: 760px) {
+    .list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-auto-flow: row;
+      align-items: start;
+    }
+  }
+</style>
