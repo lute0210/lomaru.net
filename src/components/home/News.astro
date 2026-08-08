@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+import Heading from "./Heading.astro";
+import NewsContent from "./NewsContent.astro";
+
+const news = await getCollection("news");
+---
+
+<section>
+  <Heading>NEWS</Heading>
+
+  <div>
+    {
+      news.map(({ data }) => (
+        <Fragment>
+          <hr />
+          <NewsContent
+            date={data.publishedAt}
+            title={data.title}
+            link={data.link}
+          />
+        </Fragment>
+      ))
+    }
+    <hr />
+  </div>
+</section>
+
+<style>
+  hr {
+    margin: 0 4px;
+
+    border: none;
+    border-bottom: var(--color-light-noir) 1px dashed;
+  }
+</style>

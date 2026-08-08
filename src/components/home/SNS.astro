@@ -58,16 +58,18 @@ const list: Item[] = [
     gap: 32px;
   }
 
-  a {
-    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  a:hover {
-    transform: rotate(360deg) scale(1.2);
-  }
-
   :where(svg, img) {
     width: auto;
     height: 32px;
+  }
+
+  @media (hover: hover) {
+    a {
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    a:hover {
+      transform: rotate(360deg) scale(1.2);
+    }
   }
 </style>
