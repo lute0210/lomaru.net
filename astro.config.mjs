@@ -23,4 +23,5 @@ export default defineConfig({
   ],
 
   integrations: [sitemap()],
+  site: "https://lomaru.net",
 });
