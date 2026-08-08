@@ -1,0 +1,76 @@
+---
+import { getCollection } from "astro:content";
+import Body from "../../components/blog/Body.astro";
+import Category from "../../components/blog/Category.astro";
+import Layout from "../../layouts/Layout.astro";
+import { formatDate } from "../../libs/utils";
+
+export async function getStaticPaths() {
+  const blog = await getCollection("blog");
+  return blog.map((article) => ({
+    params: {
+      blogId: article.id,
+    },
+    props: {
+      article: article,
+    },
+  }));
+}
+
+// 記事の詳細情報を取得
+const { article } = Astro.props;
+const { data } = article;
+---
+
+<Layout>
+  <article>
+    <header>
+      <div class="date">{formatDate(data.publishedAt)}</div>
+      <div class="title">
+        {data.title}
+      </div>
+      <div class="categories">
+        {data.categories.map((category) => <Category data={category} />)}
+      </div>
+    </header>
+
+    <hr />
+
+    <Body html={data.body} />
+  </article>
+</Layout>
+
+<style>
+  article {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: 680px;
+
+    margin: 0 auto;
+    gap: var(--space);
+  }
+
+  header {
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+  }
+
+  .title {
+    font-size: x-large;
+  }
+
+  .categories {
+    display: flex;
+
+    gap: 8px;
+  }
+
+  hr {
+    border: none;
+    border-bottom: var(--color-light-noir) 1px dotted;
+  }
+</style>

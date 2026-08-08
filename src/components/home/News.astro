@@ -22,7 +22,7 @@ const news = await getCollection("news");
         </Fragment>
       ))
     }
-    <hr />
+    {news.length ? <hr /> : <div>ニュースは無いよ</div>}
   </div>
 </section>
 
