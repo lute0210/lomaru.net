@@ -1,0 +1,36 @@
+name: Deploy to FTP Server
+
+on:
+  # `main`ブランチにプッシュするたびにワークフローをトリガーします。
+  # 別のブランチを使用している場合は、`main`をそのブランチ名に置き換えてください。
+  push:
+    branches: [ main ]
+  # GitHub上のActionsタブからこのワークフローを手動で実行できます。
+  workflow_dispatch:
+  # Webhook
+  repository_dispatch:
+    types: [ webhook ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v6
+      - name: Install, build, and upload your site
+        uses: withastro/action@v6
+        env:
+          MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
+          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
