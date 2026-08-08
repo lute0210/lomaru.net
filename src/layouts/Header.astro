@@ -8,10 +8,7 @@ import Logo from "../assets/logo.svg";
   </a>
 
   <nav>
-    <a class="blog" href="/blog">
-      <div class="default"><span>BLOG</span></div>
-      <div class="hover"><span>BLOG</span></div>
-    </a>
+    <a class="blog" href="/blog">BLOG</a>
   </nav>
 </header>
 
@@ -32,43 +29,10 @@ import Logo from "../assets/logo.svg";
   }
 
   .blog {
-    position: relative;
+    padding: 7px 11px;
+    border: var(--color-light-noir) 1px dashed;
 
     color: initial;
     text-decoration: none;
-  }
-
-  .default span {
-    display: block;
-
-    padding: 7px 11px;
-    border: var(--color-light-noir) 1px dashed;
-  }
-
-  .hover span {
-    display: block;
-
-    padding: 8px 12px;
-  }
-
-  .hover {
-    box-sizing: border-box;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-
-    width: 0;
-    height: 100%;
-
-    color: var(--color-blanc);
-    background-color: var(--color-noir);
-
-    transition: 0.3s;
-  }
-
-  .blog:hover .hover {
-    width: 100%;
   }
 </style>
