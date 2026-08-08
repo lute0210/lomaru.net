@@ -4,6 +4,19 @@ import { ClientRouter } from "astro:transitions";
 import Background from "./Background.astro";
 import Footer from "./Footer.astro";
 import Header from "./Header.astro";
+
+interface Props {
+  title?: string;
+  og_image?: string;
+}
+
+const props = Astro.props;
+
+const title = props.title ? `${props.title} - lomaru.net` : "lomaru.net";
+
+const og_image = props.og_image ?? "/assets/eyecatch.png";
+const og_url = Astro.url.href;
+const twitter_card = "summary";
 ---
 
 <!doctype html>
@@ -23,8 +36,15 @@ import Header from "./Header.astro";
     <!-- FONT -->
     <Font cssVariable="--font-jk-gothic" />
 
+    <!-- OGP -->
+    <meta name="og:url" content={og_url} />
+    <meta name="og:title" content={title} />
+    <meta name="og:description" content="" />
+    <meta name="og:image" content={og_image} />
+    <meta name="twitter:card" content={twitter_card} />
+
     <meta name="generator" content={Astro.generator} />
-    <title>lomaru.net</title>
+    <title>{title}</title>
 
     <ClientRouter />
   </head>

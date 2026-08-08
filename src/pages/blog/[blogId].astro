@@ -22,7 +22,7 @@ const { article } = Astro.props;
 const { data } = article;
 ---
 
-<Layout>
+<Layout title={data.title} og_image={data.eyecatch.url}>
   <article>
     <header>
       <div class="date">{formatDate(data.publishedAt)}</div>
