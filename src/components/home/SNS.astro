@@ -6,23 +6,26 @@ import Heading from "./Heading.astro";
 import Bluesky from "../../assets/bland/bluesky.svg";
 import GitHub from "../../assets/bland/github.svg";
 import X from "../../assets/bland/x.png";
+import { getStatic } from "../../libs/microcms";
 
 type Image = ImageMetadata;
 type SVG = SvgComponent & ImageMetadata;
 type Item = { Target: Image | SVG; href: string };
 
+const data = await getStatic();
+
 const list: Item[] = [
   {
     Target: X,
-    href: "https://x.com/luteTUT",
+    href: data.twitter,
   },
   {
     Target: Bluesky,
-    href: "https://bsky.app/profile/lomaru.net",
+    href: data.bluesky,
   },
   {
     Target: GitHub,
-    href: "https://github.com/lute0x0",
+    href: data.github,
   },
 ];
 ---

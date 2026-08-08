@@ -3,6 +3,9 @@ import { Image } from "astro:assets";
 import Heading from "./Heading.astro";
 
 import Icon from "../../assets/icon.jpg";
+import { getStatic } from "../../libs/microcms";
+
+const data = await getStatic();
 ---
 
 <section>
@@ -11,8 +14,8 @@ import Icon from "../../assets/icon.jpg";
     <Image class="icon" src={Icon} alt={"Icon"} />
     <div class="description">
       <div>lute</div>
-      <div>豊橋技科大 情報系</div>
-      <div>Angularが好き</div>
+      <div>{data.affiliation}</div>
+      <div>{data.aboutme}</div>
     </div>
   </div>
 </section>
