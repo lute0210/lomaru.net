@@ -15,7 +15,12 @@ const { data } = article;
 <section>
   <a href={`/blog/${article.id}`}></a>
   <div class="left">
-    <img class="eyecatch" src={data.eyecatch.url} />
+    <img
+      class="eyecatch"
+      src={data.eyecatch.url}
+      width={data.eyecatch.width}
+      height={data.eyecatch.height}
+    />
   </div>
   <div class="right">
     <div class="description">
@@ -52,6 +57,7 @@ const { data } = article;
 
   .eyecatch {
     width: 100%;
+    height: auto;
   }
 
   .right {
