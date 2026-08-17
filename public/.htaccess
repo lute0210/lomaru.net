@@ -1,0 +1,24 @@
+# ==========================================
+# シンフリーサーバー固有のキャッシュ設定
+# ==========================================
+SetEnvIf Request_URI ".*" Ngx_Cache_NoCacheMode=off
+SetEnvIf Request_URI ".*" Ngx_Cache_StaticMode
+
+# ==========================================
+# Astro用 ルーティング・リダイレクト設定
+# ==========================================
+RewriteEngine On
+DirectorySlash Off
+
+# 1. 末尾にスラッシュがある場合、スラッシュなしURLに301リダイレクト
+RewriteCond %{REQUEST_METHOD} GET [NC]
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+# 2. 直接 .html 拡張子でアクセスされた場合は拡張子なしURLにリダイレクト
+RewriteCond %{THE_REQUEST} \s/+(.+)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# 3. 対応する .html ファイルが存在すれば、それを優先して内部的に返す
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^(.+)$ $1.html [L]
