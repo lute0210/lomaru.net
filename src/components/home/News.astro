@@ -2,8 +2,16 @@
 import { getCollection } from "astro:content";
 import Heading from "./Heading.astro";
 import NewsContent from "./NewsContent.astro";
+import type { CollectionEntry } from "astro:content";
+import { compareFn_date_str } from "../../libs/utils";
+
+type News = CollectionEntry<"news">;
 
 const news = await getCollection("news");
+
+news
+  .sort((a, b) => compareFn_date_str(a.data.publishedAt, b.data.publishedAt))
+  .reverse();
 ---
 
 <section>
@@ -11,18 +19,24 @@ const news = await getCollection("news");
 
   <div>
     {
-      news.map(({ data }) => (
+      news.length ? (
         <Fragment>
+          {news.map(({ data }) => (
+            <Fragment>
+              <hr />
+              <NewsContent
+                date={data.publishedAt}
+                title={data.title}
+                link={data.link}
+              />
+            </Fragment>
+          ))}
           <hr />
-          <NewsContent
-            date={data.publishedAt}
-            title={data.title}
-            link={data.link}
-          />
         </Fragment>
-      ))
+      ) : (
+        <div>ニュースは無いよ</div>
+      )
     }
-    {news.length ? <hr /> : <div>ニュースは無いよ</div>}
   </div>
 </section>
 

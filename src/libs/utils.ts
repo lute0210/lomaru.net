@@ -5,3 +5,7 @@ export function formatDate(iso: string) {
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}.${month}.${day}`;
 }
+
+export function compareFn_date_str(a: string, b: string) {
+  return new Date(a).getTime() - new Date(b).getTime();
+}
