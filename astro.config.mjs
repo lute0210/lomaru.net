@@ -24,5 +24,9 @@ export default defineConfig({
 
   integrations: [sitemap()],
   site: "https://lomaru.net",
-  trailingSlash: "never"
+
+  trailingSlash: "never",
+  build: {
+    format: "file"
+  }
 });
