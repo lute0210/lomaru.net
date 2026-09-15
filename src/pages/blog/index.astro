@@ -1,8 +1,8 @@
 ---
-import BlogContent from "../components/blog/BlogContent.astro";
-import Heading from "../components/home/Heading.astro";
-import Layout from "../layouts/Layout.astro";
-import { BlogAPI } from "../libs/microcms/apis";
+import BlogContent from "../../components/blog/BlogContent.astro";
+import Heading from "../../components/home/Heading.astro";
+import Layout from "../../layouts/Layout.astro";
+import { BlogAPI } from "../../libs/microcms/apis";
 
 const blog = await BlogAPI.get({ orders: "-publishedAt" });
 ---
