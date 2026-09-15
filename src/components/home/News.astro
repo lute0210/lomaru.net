@@ -1,17 +1,9 @@
 ---
-import { getCollection } from "astro:content";
+import { NewsAPI } from "../../libs/microcms/apis";
 import Heading from "./Heading.astro";
 import NewsContent from "./NewsContent.astro";
-import type { CollectionEntry } from "astro:content";
-import { compareFn_date_str } from "../../libs/utils";
 
-type News = CollectionEntry<"news">;
-
-const news = await getCollection("news");
-
-news
-  .sort((a, b) => compareFn_date_str(a.data.publishedAt, b.data.publishedAt))
-  .reverse();
+const news = await NewsAPI.get({ orders: "-publishedAt" });
 ---
 
 <section>
@@ -21,7 +13,7 @@ news
     {
       news.length ? (
         <Fragment>
-          {news.map(({ data }) => (
+          {news.map((data) => (
             <Fragment>
               <hr />
               <NewsContent

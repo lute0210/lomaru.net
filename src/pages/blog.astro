@@ -1,9 +1,9 @@
 ---
 import { getCollection } from "astro:content";
-import BlogContent from "../../components/blog/BlogContent.astro";
-import Heading from "../../components/home/Heading.astro";
-import Layout from "../../layouts/Layout.astro";
-import { compareFn_date_str } from "../../libs/utils";
+import BlogContent from "../components/blog/BlogContent.astro";
+import Heading from "../components/home/Heading.astro";
+import Layout from "../layouts/Layout.astro";
+import { compareFn_date_str } from "../libs/utils";
 
 const blog = await getCollection("blog");
 

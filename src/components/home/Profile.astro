@@ -3,9 +3,9 @@ import { Image } from "astro:assets";
 import Heading from "./Heading.astro";
 
 import Icon from "../../assets/icon.jpg";
-import { getStatic } from "../../libs/microcms";
+import { StaticAPI } from "../../libs/microcms/apis";
 
-const data = await getStatic();
+const data = await StaticAPI.get();
 ---
 
 <section>
