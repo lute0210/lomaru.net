@@ -17,6 +17,14 @@ type ExtendWithDate<T extends ZodObject> = z.ZodObject<
   T["shape"] & typeof DateSchema.shape
 >;
 
+const IDSchema = z.object({
+  id: z.string(),
+});
+
+type ExtendWithID<T extends ZodObject> = z.ZodObject<
+  T["shape"] & typeof IDSchema.shape
+>;
+
 abstract class API<T extends ZodObject> {
   private _endpoint: string;
   private _schema: ExtendWithDate<T>;
@@ -35,12 +43,12 @@ abstract class API<T extends ZodObject> {
   }
 }
 
-export class ListAPI<T extends ZodObject> extends API<T> {
+export class ListAPI<T extends ZodObject> extends API<ExtendWithID<T>> {
   private _schemaWithID = this.schema.extend({ id: z.string() });
   private _dataSchema = z.array(this._schemaWithID);
 
   constructor(endpoint: string, schema: T) {
-    super(endpoint, schema);
+    super(endpoint, schema.extend(IDSchema.shape));
   }
 
   async get(
