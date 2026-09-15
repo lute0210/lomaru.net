@@ -1,19 +1,18 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type { z } from "astro/zod";
+import type { BlogAPI } from "../../libs/microcms/apis";
 import { formatDate } from "../../libs/utils";
 import Category from "./Category.astro";
 
 interface Props {
-  article: CollectionEntry<"blog">;
+  data: z.infer<typeof BlogAPI.schema>;
 }
 
-const { article } = Astro.props;
-
-const { data } = article;
+const { data } = Astro.props;
 ---
 
 <section>
-  <a href={`/blog/${article.id}`}></a>
+  <a href={`/blog/${data.id}`}></a>
   <div class="left">
     <img
       class="eyecatch"
