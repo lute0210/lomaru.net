@@ -1,9 +1,10 @@
 ---
+import { use } from "../../libs/microcms";
 import { NewsAPI } from "../../libs/microcms/apis";
 import Heading from "./Heading.astro";
 import NewsContent from "./NewsContent.astro";
 
-const news = await NewsAPI.get({ orders: "-publishedAt" });
+const news = await use(NewsAPI).get({ orders: "-publishedAt" });
 ---
 
 <section>

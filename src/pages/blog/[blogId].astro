@@ -2,40 +2,41 @@
 import Body from "../../components/blog/Body.astro";
 import Category from "../../components/blog/Category.astro";
 import Layout from "../../layouts/Layout.astro";
+import { use } from "../../libs/microcms";
 import { BlogAPI } from "../../libs/microcms/apis";
 import { formatDate } from "../../libs/utils";
 
 export async function getStaticPaths() {
-  const blog = await BlogAPI.get({ orders: "publishedAt" });
+  const blog = await use(BlogAPI).get({ orders: "publishedAt" });
   return blog.map((article) => ({
     params: {
       blogId: article.id,
     },
     props: {
-      data: article,
+      article,
     },
   }));
 }
 
 // 記事の詳細情報を取得
-const { data } = Astro.props;
+const { article } = Astro.props;
 ---
 
-<Layout title={data.title} og_image={data.eyecatch.url}>
+<Layout title={article.title} og_image={article.eyecatch.url}>
   <article>
     <header>
-      <div class="date">{formatDate(data.publishedAt)}</div>
+      <div class="date">{formatDate(article.publishedAt)}</div>
       <div class="title">
-        {data.title}
+        {article.title}
       </div>
       <div class="categories">
-        {data.categories.map((category) => <Category data={category} />)}
+        {article.categories.map((category) => <Category data={category} />)}
       </div>
     </header>
 
     <hr />
 
-    <Body html={data.body} />
+    <Body html={article.body} />
   </article>
 </Layout>
 

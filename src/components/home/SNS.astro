@@ -6,13 +6,14 @@ import Heading from "./Heading.astro";
 import Bluesky from "../../assets/bland/bluesky.svg";
 import GitHub from "../../assets/bland/github.svg";
 import X from "../../assets/bland/x.png";
+import { use } from "../../libs/microcms";
 import { StaticAPI } from "../../libs/microcms/apis";
 
 type Image = ImageMetadata;
 type SVG = SvgComponent & ImageMetadata;
 type Item = { Target: Image | SVG; href: string };
 
-const data = await StaticAPI.get();
+const data = await use(StaticAPI).get();
 
 const list: Item[] = [
   {

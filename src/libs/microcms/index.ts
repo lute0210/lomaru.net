@@ -1,85 +1,102 @@
-import { z, ZodObject } from "astro/zod";
+import { z, type ZodObject, type ZodRawShape } from "astro/zod";
 import { createClient, type MicroCMSQueries } from "microcms-js-sdk";
 
+// API interface
+type Format = "list" | "object";
+
+export interface API<F extends Format, S extends ZodRawShape> {
+  format: F;
+  endpoint: string;
+  schema: ZodObject<S>;
+}
+
+export function define<F extends Format, S extends ZodRawShape>(
+  api: API<F, S>,
+): API<F, S> {
+  return api;
+}
+
+// Client
 const client = createClient({
   serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN,
   apiKey: import.meta.env.MICROCMS_API_KEY,
 });
 
-const DateSchema = z.object({
+const DateShape = {
   createdAt: z.string(),
   updatedAt: z.string(),
   publishedAt: z.string(),
   revisedAt: z.string(),
-});
+} as const;
 
-type ExtendWithDate<T extends ZodObject> = z.ZodObject<
-  T["shape"] & typeof DateSchema.shape
->;
-
-const IDSchema = z.object({
+const IDShape = {
   id: z.string(),
-});
+} as const;
 
-type ExtendWithID<T extends ZodObject> = z.ZodObject<
-  T["shape"] & typeof IDSchema.shape
->;
+// Adapter class & Executor
+abstract class APIAdapter<F extends Format, S extends ZodRawShape> {
+  api: API<F, S>;
 
-abstract class API<T extends ZodObject> {
-  private _endpoint: string;
-  private _schema: ExtendWithDate<T>;
-
-  constructor(endpoint: string, schema: T) {
-    this._endpoint = endpoint;
-    this._schema = schema.extend(DateSchema.shape);
-  }
-
-  get endpoint() {
-    return this._endpoint;
-  }
-
-  get schema() {
-    return this._schema;
+  constructor(api: API<F, S>) {
+    this.api = api;
   }
 }
 
-export class ListAPI<T extends ZodObject> extends API<ExtendWithID<T>> {
-  private _schemaWithID = this.schema.extend({ id: z.string() });
-  private _dataSchema = z.array(this._schemaWithID);
-
-  constructor(endpoint: string, schema: T) {
-    super(endpoint, schema.extend(IDSchema.shape));
-  }
+class ObjectAPIAdapter<S extends ZodRawShape> extends APIAdapter<"object", S> {
+  responseSchema = getResponseSchema(this.api);
 
   async get(
     queries?: MicroCMSQueries,
-  ): Promise<z.infer<typeof this._dataSchema>> {
-    try {
-      const response = await client.getAllContents<
-        z.infer<typeof this._schemaWithID>
-      >({ endpoint: this.endpoint, queries });
-      return this._dataSchema.parse(response);
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
+  ): Promise<z.infer<typeof this.responseSchema>> {
+    const response = await client.getObject({
+      endpoint: this.api.endpoint,
+      queries,
+    });
+    return this.responseSchema.parse(response);
   }
 }
 
-export class ObjectAPI<T extends ZodObject> extends API<T> {
-  constructor(endpoint: string, schema: T) {
-    super(endpoint, schema);
-  }
+class ListAPIAdapter<S extends ZodRawShape> extends APIAdapter<"list", S> {
+  responseSchema = getResponseSchema(this.api);
+  responseList = z.array(this.responseSchema);
 
-  async get(): Promise<z.infer<typeof this.schema>> {
-    try {
-      const response = await client.getObject<z.infer<typeof this.schema>>({
-        endpoint: this.endpoint,
-      });
-      return this.schema.parse(response);
-    } catch (error) {
-      console.error(error);
-      return {} as any;
-    }
+  async get(
+    queries?: MicroCMSQueries,
+  ): Promise<z.infer<typeof this.responseList>> {
+    const response = await client.getAllContents({
+      endpoint: this.api.endpoint,
+      queries,
+    });
+    return this.responseList.parse(response);
   }
+}
+
+// Convert adapter function
+export function use<S extends ZodRawShape>(
+  api: API<"object", S>,
+): ObjectAPIAdapter<S>;
+export function use<S extends ZodRawShape>(
+  api: API<"list", S>,
+): ListAPIAdapter<S>;
+export function use<S extends ZodRawShape>(
+  api: API<Format, S>,
+): APIAdapter<Format, S> {
+  return api.format === "object"
+    ? new ObjectAPIAdapter(api as API<"object", S>)
+    : new ListAPIAdapter(api as API<"list", S>);
+}
+
+// Generate response schema
+export function getResponseSchema<S extends ZodRawShape>(
+  api: API<"object", S>,
+): ZodObject<S & typeof DateShape>;
+export function getResponseSchema<S extends ZodRawShape>(
+  api: API<"list", S>,
+): ZodObject<S & typeof DateShape & typeof IDShape>;
+export function getResponseSchema<F extends Format, S extends ZodRawShape>(
+  api: API<F, S>,
+) {
+  return api.format === "object"
+    ? api.schema.extend(DateShape)
+    : api.schema.extend(DateShape).extend(IDShape);
 }

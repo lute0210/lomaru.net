@@ -3,9 +3,10 @@ import { Image } from "astro:assets";
 import Heading from "./Heading.astro";
 
 import Icon from "../../assets/icon.jpg";
+import { use } from "../../libs/microcms";
 import { StaticAPI } from "../../libs/microcms/apis";
 
-const data = await StaticAPI.get();
+const data = await use(StaticAPI).get();
 ---
 
 <section>
